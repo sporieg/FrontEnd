@@ -1,0 +1,14 @@
+    
+<template>
+  <div class="issue-list">
+    <ul class="list-group">
+      <li repeat.for="issue of issues" class="list-group-item ${issue.number === $parent.selectedId ? 'active' : ''}">
+        <a route-href="route: issues; params.bind: {id:issue.number}" click.delegate="$parent.select(issue)">
+          <h4 class="list-group-item-heading">${issue.title}</h4>
+        </a>
+      </li>
+    </ul>
+  </div>
+</template>
+
+  

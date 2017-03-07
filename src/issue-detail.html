@@ -1,0 +1,41 @@
+<template>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">${issue.title}</h3>            
+            <div class="media">
+                <div class="media-left">
+                    <img class="media-object avatar" src="${issue.user.avatar_url}">
+                </div>
+                <div class="media-body">
+                    Submitted by <a href="">${issue.user.login}</a> on ${issue.created_at}
+                </div>
+            </div>
+            <span repeat.for="lbl of issue.labels" class="label" style="background-color: #${lbl.color}">
+                ${lbl.name}
+            </span>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <p class="col-md-10 col-xs-12">${issue.body}</p>
+                <ul class="list-group col-md-2 col-xs-12">
+                    <li class="list-group-item">
+                        <h5>Assignees:<h5>
+                        <div if.bind="issue.assignee.login">
+                            <div class="media">
+                                <div class="media-left">
+                                    <img class="media-object avatar-sm" src="${issue.assignee.avatar_url}">
+                                </div>
+                                <div class="media-body">
+                                     ${issue.assignee.login}
+                                </div>
+                            </div>                           
+                        </div>
+                        <div if.bind="!issue.assignee.login">
+                            No One Assigned
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
