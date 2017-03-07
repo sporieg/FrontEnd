@@ -5,11 +5,12 @@ export class GithubApi{
 
   constructor(){
       this.httpClient = new HttpClient();
+      var me = this;
       this.httpClient.configure(config =>config
         .withBaseUrl('https://api.github.com/')
         .withInterceptor({
             response(resp) {
-                this.isRequesting = false;
+                me.isRequesting = false;
                 return resp.json();
             }
         }));

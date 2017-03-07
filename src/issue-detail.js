@@ -1,10 +1,13 @@
 import {GithubApi} from './github-api'
+import {EventAggregator} from 'aurelia-event-aggregator';
+import {IssueViewed} from './messages';
 
 export class IssueDetail {
-    static inject() { return [GithubApi]};
+    static inject() { return [GithubApi, EventAggregator]};
 
-    constructor(api){
+    constructor(api, ea){
         this.api = api;
+        this.ea = ea;
     }
 
     activate(params, routeConfig){
@@ -13,6 +16,7 @@ export class IssueDetail {
         return this.api.getIssueDetails(params.id).then(issue => {
             this.issue = issue;
             this.routeConfig.navModel.setTitle(issue.title);
+            this.ea.publish(new IssueViewed(issue));
         })
     }
 }

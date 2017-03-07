@@ -1,4 +1,12 @@
-export class App {
+import {GithubApi} from './github-api';
+
+export class App { 
+  static inject() { return [GithubApi]; }
+
+  constructor(api) {
+    this.api = api;
+  }
+
   configureRouter(config, router){
     config.title = 'Coding Assignment';
     config.map([

@@ -11,7 +11,7 @@
       </a>
     </div>
   </nav>
-
+  <loading-indicator loading.bind="router.isNavigating || api.isRequesting"></loading-indicator>
   <div class="container-fluid">
     <div class="row">
       <issue-list class="col-md-4">Issue List Placeholder</issue-list>
