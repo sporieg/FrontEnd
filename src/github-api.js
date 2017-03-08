@@ -17,12 +17,14 @@ export class GithubApi{
   }
 
   todayString(){
-      return '2017-2-28';
+    var d = new Date();
+    d.setDate(d.getDate() - 7);
+    return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
   }
   
   getIssues(){
     this.isRequesting = true;
-    var url = 'repos/angular/angular/issues?since' + this.todayString();
+    var url = 'repos/angular/angular/issues?since=' + this.todayString();
     return this.httpClient.fetch(url);
   }
 

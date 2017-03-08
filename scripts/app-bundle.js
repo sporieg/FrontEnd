@@ -76,12 +76,14 @@ define('github-api',['exports', 'aurelia-fetch-client'], function (exports, _aur
     }
 
     GithubApi.prototype.todayString = function todayString() {
-      return '2017-2-28';
+      var d = new Date();
+      d.setDate(d.getDate() - 7);
+      return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
     };
 
     GithubApi.prototype.getIssues = function getIssues() {
       this.isRequesting = true;
-      var url = 'repos/angular/angular/issues?since' + this.todayString();
+      var url = 'repos/angular/angular/issues?since=' + this.todayString();
       return this.httpClient.fetch(url);
     };
 
@@ -184,55 +186,6 @@ define('issue-list',['exports', './github-api', 'aurelia-event-aggregator', './m
         return IssueList;
     }();
 });
-define('loading-indicator',['exports', 'nprogress', 'aurelia-framework'], function (exports, _nprogress, _aureliaFramework) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.LoadingIndicator = undefined;
-
-  var nprogress = _interopRequireWildcard(_nprogress);
-
-  function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-      return obj;
-    } else {
-      var newObj = {};
-
-      if (obj != null) {
-        for (var key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-        }
-      }
-
-      newObj.default = obj;
-      return newObj;
-    }
-  }
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var LoadingIndicator = exports.LoadingIndicator = (0, _aureliaFramework.decorators)((0, _aureliaFramework.noView)(['nprogress/nprogress.css']), (0, _aureliaFramework.bindable)({ name: 'loading', defaultValue: false })).on(function () {
-    function _class() {
-      _classCallCheck(this, _class);
-    }
-
-    _class.prototype.loadingChanged = function loadingChanged(newValue) {
-      if (newValue) {
-        nprogress.start();
-      } else {
-        nprogress.done();
-      }
-    };
-
-    return _class;
-  }());
-});
 define('main',['exports', './environment'], function (exports, _environment) {
   'use strict';
 
@@ -270,6 +223,25 @@ define('main',['exports', './environment'], function (exports, _environment) {
       return aurelia.setRoot();
     });
   }
+});
+define('messages',["exports"], function (exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var IssueViewed = exports.IssueViewed = function IssueViewed(issue) {
+        _classCallCheck(this, IssueViewed);
+
+        this.issue = issue;
+    };
 });
 define('no-selection',["exports"], function (exports) {
   "use strict";
@@ -349,25 +321,6 @@ define('resources/elements/loading-indicator',['exports', 'nprogress', 'aurelia-
 
     return _class;
   }());
-});
-define('messages',["exports"], function (exports) {
-    "use strict";
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-
-    function _classCallCheck(instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-        }
-    }
-
-    var IssueViewed = exports.IssueViewed = function IssueViewed(issue) {
-        _classCallCheck(this, IssueViewed);
-
-        this.issue = issue;
-    };
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"bootstrap/css/bootstrap.css\"></require>\n  <require from=\"./styles.css\"></require>\n  <require from=\"./issue-list\"></require>\n\n  <nav class=\"navbar navbar-default navbar-fixed-top\" role=\"navigation\">\n    <div class=\"navbar-header\">\n      <a class=\"navbar-brand\" href=\"#\">\n        <i class=\"fa fa-user\"></i>\n        <span>Angular Issues</span>\n      </a>\n    </div>\n  </nav>\n  <loading-indicator loading.bind=\"router.isNavigating || api.isRequesting\"></loading-indicator>\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <issue-list class=\"col-md-4\">Issue List Placeholder</issue-list>\n      <router-view class=\"col-md-8\"></router-view>\n    </div>\n  </div>\n</template>\n"; });
 define('text!styles.css', ['module'], function(module) { module.exports = "body {\n  padding-top: 70px; }\n\nsection {\n  margin: 0 20px; }\n\na:focus {\n  outline: none; }\n\n.navbar-nav li.loader {\n  margin: 12px 24px 0 6px; }\n\n.no-selection {\n  margin: 20px; }\n\n.issue-list {\n  overflow-y: auto;\n  border: 1px solid #ddd;\n  padding: 10px; }\n\n.panel {\n  margin: 20px; }\n\n.button-bar {\n  right: 0;\n  left: 0;\n  bottom: 0;\n  border-top: 1px solid #ddd;\n  background: white; }\n\n.button-bar > button {\n  float: right;\n  margin: 20px; }\n\nli.list-group-item {\n  list-style: none; }\n\nli.list-group-item > a {\n  text-decoration: none; }\n\nli.list-group-item.active > a {\n  color: white; }\n\n.avatar {\n  height: 32px;\n  width: 32px; }\n\n.avatar-sm {\n  height: 12px;\n  width: 12px; }\n"; });
